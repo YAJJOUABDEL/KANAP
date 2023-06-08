@@ -9,13 +9,13 @@ fetch('http://localhost:3000/api/products/')
       // Créer l'élément produit
       const productElement = document.createElement('a');
       productElement.href = `./product.html?id=${product._id}`;
-      productElement.innerHTML = `
+      productElement.innerHTML = `<a href="./product.html?id=42">
         <article>
           <img src="${product.imageUrl}" alt="${product.altTxt}">
           <h3 class="productName">${product.name}</h3>
           <p class="productDescription">${product.description}</p>
         </article>
-      `;
+      <a>`;
 
       // Ajouter l'élément product au conteneur items
       itemsContainer.appendChild(productElement);
