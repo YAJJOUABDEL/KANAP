@@ -18,9 +18,13 @@ const params = new URL(document.location).searchParams;
           const colorElement = document.getElementById("colors");
           const addButtonElement = document.getElementById("addToCart");
           const quantityElement = document.getElementById("itemQuantity");
-
+          const addImg = document.createElement("img");
+          document.querySelector(".item__img").appendChild(addImg);
+          addImg.setAttribute("src", `${data.imageUrl}`);
+          
           titleElement.innerHTML = data.name;
-          priceElement.innerHTML = data.price;
+          priceElement.innerHTML = data.price;    
+          
           if(quantityElement){
             quantityElement.addEventListener("change",function(){
               userChoice.quantity = quantityElement.value;
