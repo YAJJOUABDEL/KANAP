@@ -26,6 +26,7 @@ const params = new URL(document.location).searchParams;
           titleElement.innerHTML = data.name;
           priceElement.innerHTML = data.price;    
           
+          //Choix de la quantité 
           if(quantityElement){
             quantityElement.addEventListener("change",function(){
               userChoice.quantity = quantityElement.value;
@@ -40,7 +41,7 @@ const params = new URL(document.location).searchParams;
             colorElement.appendChild(newOption);
         });})
     };
-
+        //Condition clic
     const addToCart = document .getElementById("addToCart");
     addToCart.addEventListener("click", () => {
       const addProduct ={
@@ -52,7 +53,7 @@ const params = new URL(document.location).searchParams;
 
    let addProductlocalStorage = []
     if(localStorage.getItem("addToCart") !==null){
-        addProductlocalStorage = json.pars(localStorage.getItem("addToCart"))
+        addProductlocalStorage = JSON.parse(localStorage.getItem("addToCart"))
         addProductlocalStorage.push(addToCart)
         localStorage.setItem("addToCart", JSON.stringify(addProductlocalStorage))
     }else {
