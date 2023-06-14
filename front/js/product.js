@@ -40,7 +40,7 @@ const params = new URL(document.location).searchParams;
             newOption.text = color;
             colorElement.appendChild(newOption);
         });})
-    };
+    };  
         //Condition clic
     const addToCart = document .getElementById("addToCart");
     addToCart.addEventListener("click", () => {
@@ -53,13 +53,16 @@ const params = new URL(document.location).searchParams;
 
    let addProductlocalStorage = []
     if(localStorage.getItem("addToCart") !==null){
-        addProductlocalStorage = JSON.parse(localStorage.getItem("addToCart"))
-        addProductlocalStorage.push(addToCart)
-        localStorage.setItem("addToCart", JSON.stringify(addProductlocalStorage))
-    }else {
-      addProductlocalStorage.push(addProduct)
-      localStorage.setItem("addToCart", JSON.stringify(addProductlocalStorage))
+        addProductlocalStorage = JSON.parse(localStorage.getItem("addToCart"));
+        localStorage.removeItem('addToCart');
+      }
+   let productExsitant = addProductlocalStorage.find(p =>p.id == addProduct.id && p.color == addProduct.color);
+   if (productExsitant) {
+    productExsitant.qantity = (Number(productExsitant.qantity) + Number(addProduct.qantity)).toString();
+  }
+    else{addProductlocalStorage.push(addProduct);}
 
-    }
+        localStorage.setItem("addToCart", JSON.stringify(addProductlocalStorage));
+    
   })
     getArticle();
