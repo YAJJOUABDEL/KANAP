@@ -73,6 +73,24 @@ const params = new URL(document.location).searchParams;
   })
 
   function isQantityError(productExsitant){
-    return (Number(productExsitant.qantity) > 100 || Number(productExsitant.qantity) < 1 || productExsitant.qantity.indexOf(".") >-1 ||productExsitant.qantity.indexOf(",") >-1 )
+    let message = "";
+    let isError = false;
+    if (Number(productExsitant.qantity) >100){
+     message += "Vous avez dépassé la limite de commande. ";
+      isError = true;
+    }
+    if (Number(productExsitant.qantity) < 1){
+      message += "Votre saisie est incorrect les chiffres négatifs ne sont pas autorisés. ";
+      isError = true;
+    }
+    if (productExsitant.qantity.indexOf(".") >-1 ||productExsitant.qantity.indexOf(",") >-1 ){
+      message += "Seule les nombres entiers sont autorisés.";
+      isError = true;
+    }
+    if (message!=""){
+      alert(message);
+    }
+      return isError;
+    //return (Number(productExsitant.qantity) > 100 || Number(productExsitant.qantity) < 1 || productExsitant.qantity.indexOf(".") >-1 ||productExsitant.qantity.indexOf(",") >-1 )
   }
     getArticle();
