@@ -49,20 +49,30 @@ const params = new URL(document.location).searchParams;
         color : document.getElementById("colors").value,
         id : id
       }
-    
-
+      if (isQantityError(addProduct)){
+    //Je remonte un message lors de la sélèction de quantité de produit
+    return;
+   }
+   let quantity = addProduct.qantity;   
    let addProductlocalStorage = []
     if(localStorage.getItem("addToCart") !==null){
         addProductlocalStorage = JSON.parse(localStorage.getItem("addToCart"));
-        localStorage.removeItem('addToCart');
       }
-   let productExsitant = addProductlocalStorage.find(p =>p.id == addProduct.id && p.color == addProduct.color);
+   let productExsitant = addProductlocalStorage.find(produit => produit.id == addProduct.id && produit.color == addProduct.color);
    if (productExsitant) {
     productExsitant.qantity = (Number(productExsitant.qantity) + Number(addProduct.qantity)).toString();
+    if (isQantityError(productExsitant)){
+      //Je remonte un message lors de la sélèction de quantité de produit
+      return;
+     }
   }
     else{addProductlocalStorage.push(addProduct);}
-
-        localStorage.setItem("addToCart", JSON.stringify(addProductlocalStorage));
+       localStorage.removeItem('addToCart');
+       localStorage.setItem("addToCart", JSON.stringify(addProductlocalStorage));
     
   })
+
+  function isQantityError(productExsitant){
+    return (Number(productExsitant.qantity) > 100 || Number(productExsitant.qantity) < 1 || productExsitant.qantity.indexOf(".") >-1 ||productExsitant.qantity.indexOf(",") >-1 )
+  }
     getArticle();
