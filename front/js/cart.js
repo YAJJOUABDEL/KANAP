@@ -6,13 +6,19 @@ if(localStorage.getItem("addToCart") !==null){
     const cartItemsContainer = document.getElementById("cart__items");
 
     // Obtenir les canapés sélectionnés et les quantités de localStorage
-    let selectedSofas = [];
+    let selectedProducts = [];
     if (localStorage.getItem("addToCart") !== null) {
-      selectedSofas = JSON.parse(localStorage.getItem("addToCart"));
+      selectedProducts = JSON.parse(localStorage.getItem("addToCart"));
     }
 
+    fetch('http://localhost:3000/api/products/')
+  .then(response => response.json())
+  .then(data => {
+   let somme = 0; 
     // Parcourez les canapés sélectionnés et générez dynamiquement des éléments de panier
-    selectedSofas.forEach(function(sofa) {
+    selectedProducts.forEach(function(sofa) {
+      let selectedProduct = data.find (produit => produit._id == sofa.id);
+      somme += Number (sofa.qantity)*Number(selectedProduct.price);
       const cartItem = document.createElement("article");
       cartItem.classList.add("cart__item");
       cartItem.setAttribute("data-id", sofa.id);
@@ -21,8 +27,8 @@ if(localStorage.getItem("addToCart") !==null){
       const cartItemImage = document.createElement("div");
       cartItemImage.classList.add("cart__item__img");
       const sofaImage = document.createElement("img");
-      sofaImage.src = "../images/product01.jpg"; // Remplacer par l'URL réelle de l'image du canapé
-      sofaImage.alt = "Photographie d'un canapé";
+      sofaImage.src = selectedProduct.imageUrl; // Remplacer par l'URL réelle de l'image du canapé
+      sofaImage.alt = selectedProduct.altTxt;
       cartItemImage.appendChild(sofaImage);
       cartItem.appendChild(cartItemImage);
       const cartItemContent = document.createElement("div");
@@ -31,11 +37,11 @@ if(localStorage.getItem("addToCart") !==null){
       const cartItemDescription = document.createElement("div");
       cartItemDescription.classList.add("cart__item__content__description");
       const sofaName = document.createElement("h2");
-      sofaName.innerText = "Nom du produit"; // Remplacer par le vrai nom du canapé
+      sofaName.innerText = selectedProduct.name; // Remplacer par le vrai nom du canapé
       const sofaColor = document.createElement("p");
       sofaColor.innerText = sofa.color;
       const sofaPrice = document.createElement("p");
-      sofaPrice.innerText = (""); // Remplacer par le prix réel du canapé
+      sofaPrice.innerText = ("PU: "+selectedProduct.price+"€"); // Remplacer par le prix réel du canapé
 
       cartItemDescription.appendChild(sofaName);
       cartItemDescription.appendChild(sofaColor);
@@ -53,7 +59,7 @@ if(localStorage.getItem("addToCart") !==null){
       quantityInput.name = "itemQuantity";
       quantityInput.min = "1";
       quantityInput.max = "100";
-      quantityInput.value = sofa.quantity;
+      quantityInput.value = sofa.qantity;
       cartItemQuantity.appendChild(quantityLabel);
       cartItemQuantity.appendChild(quantityInput);
       cartItemSettings.appendChild(cartItemQuantity);
@@ -70,4 +76,12 @@ if(localStorage.getItem("addToCart") !==null){
 
       cartItemsContainer.appendChild(cartItem);
     });
+    document.getElementById("totalPrice").innerHTML = somme;//somme totale des canapés
+    });
+  })
+  .catch(error => {
+    console.error('Error:', error);
   });
+    
+    
+  
