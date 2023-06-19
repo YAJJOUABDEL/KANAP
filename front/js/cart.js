@@ -81,6 +81,9 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(response => response.json())
       .then(data => {
           let orderId = data.orderId;
+          var query = new URLSearchParams();
+          query.append("orderId", orderId);
+          location.href = "/front/html/confirmation.html?" + query.toString();
       })
       .catch(data => {
         alert ("une erreur c'est produite");
@@ -263,4 +266,5 @@ document.addEventListener("DOMContentLoaded", function () {
     showProducts(); //fonction pour actualiser les produits affichés et le prix total
   }
 });
+
 
