@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
           let orderId = data.orderId;
           var query = new URLSearchParams();
           query.append("orderId", orderId);
+          localStorage.removeItem('addToCart');//Suppression de la donnée une la confirmation de la commande
           location.href = "/front/html/confirmation.html?" + query.toString();
       })
       .catch(data => {
