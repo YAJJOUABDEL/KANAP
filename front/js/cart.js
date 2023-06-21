@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   //Cette fonction est appelée lors du clic sur le bouton "Supprimer" pour un produit
   //Il récupère l'ID et la couleur du produit à partir de l' elementargument (qui est le bouton de suppression)
-  //Il met ensuite à jour localStorage et appelle la showProductsfonction pour actualiser les produits affichés et le prix total.
+  //Il met ensuite à jour localStorage et appelle showProducts pour actualiser les produits affichés et le prix total.
   function deleteProcduct(element) {
     let id = element.getAttribute("identifiant");
     let color = element.getAttribute("color");
@@ -264,7 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.removeItem('addToCart');
     localStorage.setItem("addToCart", JSON.stringify(deleteProductlocalStorage));
 
-    showProducts(); //fonction pour actualiser les produits affichés et le prix total
+    showProducts(); //Actualise les produits affichés et le prix total
   }
 });
 
