@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     let firstNameInput = document.getElementById("firstName");
     firstNameInput.addEventListener("change", () => {
-      if (!firstNameInput.value || !firstNameInput.value.match(/^([^0-9]*)$/)){
+      if (!firstNameInput.value || !firstNameInput.value.match(/^([^0-9]*)$/)){//Mise en place de Regex
         document.getElementById("firstNameErrorMsg").innerHTML = "le prénom n'est pas renseigné. ";
       }
       else {
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let lastNameInput = document.getElementById("lastName");
     lastNameInput.addEventListener("change", () => {
-      if (!lastNameInput.value || !lastNameInput.value.match(/^([^0-9]*)$/)){
+      if (!lastNameInput.value || !lastNameInput.value.match(/^([^0-9]*)$/)){//Mise en place de Regex
         document.getElementById("lastNameErrorMsg").innerHTML = "le nom n'est pas renseigné. ";
       }
       else {
