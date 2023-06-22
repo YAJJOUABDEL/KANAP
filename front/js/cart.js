@@ -10,45 +10,61 @@ document.addEventListener("DOMContentLoaded", function () {
   let allProducts = [];
   showProducts();
   checkNameCustomer();
-   document.querySelector("form").addEventListener("submit", ()=>{
+  document.querySelector("form").addEventListener("submit", (e)=>{
     //document.getElementById("order").addEventListener("click", ()=>{
+      //$(".cart__order__form").submit(function(e){
+    let hasError = false;
     var fstName = document.getElementById("firstName").value;
     var lastName = document.getElementById("lastName").value;
     var address = document.getElementById("address").value;
     var city = document.getElementById("city").value;
     var email = document.getElementById("email").value;
     let regEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+\.)+[\w-]{2,4}$/i;
-    let msg = "";
+  
     if (!email || !email.match (regEmail)){
-      msg += "l'email n'est pas bien renseigné. " ;
-    
+     // msg += "l'email n'est pas bien renseigné. " ;
+     document.getElementById("emailErrorMsg").innerHTML = "l'email n'est pas bien renseigné. " ;
+      hasError = true;
     }
+    else {
+      document.getElementById("emailErrorMsg").innerHTML = "";
+    }
+
     if (!address){
-      msg += "l'adresse n'est pas renseigné. ";
-      
+      //msg += "l'adresse n'est pas renseigné. ";
+      document.getElementById("addressErrorMsg").innerHTML = "l'adresse n'est pas renseigné. ";
+      hasError = true;
     }
+    else {
+      document.getElementById("addressErrorMsg").innerHTML = "";
+    }
+
     if (!city){
-      msg += "la ville n'est pas renseigné. ";
+      //msg += "la ville n'est pas renseigné. ";
+      document.getElementById("cityErrorMsg").innerHTML = "la ville n'est pas renseigné. ";
+      hasError = true;
     }
-    if (!fstName){
-      msg += "le prénom n'est pas renseigné. ";
+    else {
+      document.getElementById("cityErrorMsg").innerHTML = "";
     }
+
+    if (!fstName || !fstName.match (/^([^0-9]*)$/)){
+      //msg += "le prénom n'est pas renseigné. ";
+      document.getElementById("firstNameErrorMsg").innerHTML = "le prénom n'est pas renseigné. ";
+      hasError = true;
+    }
+    else {
+      document.getElementById("firstNameErrorMsg").innerHTML = "";
+    }
+
     if (!lastName){
-      msg += "le nom n'est pas renseigné";
+      //msg += "le nom n'est pas renseigné";
+      document.getElementById("lastNameErrorMsg").innerHTML = "le nom n'est pas renseigné";
+      hasError = true;
     }
-    if (msg !=""){
-
-      alert (msg);
-      return;
+    else {
+      document.getElementById("lastNameErrorMsg").innerHTML = "";
     }
-
-    let customer = {
-      firstName : fstName, 
-      lastName : lastName,
-      address : address,
-      city : city,
-      email : email
-    };
     let productsInCart = [];
     
     if (localStorage.getItem("addToCart") !== null) {
@@ -57,6 +73,23 @@ document.addEventListener("DOMContentLoaded", function () {
         productsInCart.push(cart[i].id);
       }
     }
+    if(productsInCart.length == 0){
+      alert("Veuillez sélèctionner un produits avant de passer à la commande")
+    }
+    if (hasError || productsInCart.length == 0){
+      e.preventDefault();
+       return;
+    }
+    
+
+    let customer = {
+      firstName : fstName, 
+      lastName : lastName,
+      address : address,
+      city : city,
+      email : email
+    };
+    
     let cmd = {
       contact: {
         firstName: customer.firstName,
@@ -83,33 +116,39 @@ document.addEventListener("DOMContentLoaded", function () {
           let orderId = data.orderId;
           var query = new URLSearchParams();
           query.append("orderId", orderId);
-          localStorage.removeItem('addToCart');//Suppression de la donnée une la confirmation de la commande
+          localStorage.removeItem('addToCart');//Suppression de la donnée une fois la confirmation de la commande
           location.href = "/front/html/confirmation.html?" + query.toString();
       })
       .catch(data => {
         alert ("une erreur c'est produite");
     });
-
-  })
+    e.preventDefault();
+  });
   function checkNameCustomer(){
-    let inputs = document.querySelectorAll("#firstName, #lastName");
-  for (var i = 0; i < inputs.length; i++) {
-    let currentInput = inputs[i];
-    //Il vérifie chaque caractère de la valeur d'entrée et affiche une alerte n'est pas une lettre
-    //Il efface également le champ de saisie si un caractère non valide est entré
-    currentInput.addEventListener("change", () => {
-      for (var j = 0; j < currentInput.value.length; j++) {
-        let caractere = currentInput.value[j];
-        if ((caractere < "a" || caractere > "z") && (caractere < "A" || caractere > "Z")) {
-          alert("Seule les lettres sont autorisés.");
-          currentInput.value = "";
-          return;
-        }
+    
+    let firstNameInput = document.getElementById("firstName");
+    firstNameInput.addEventListener("change", () => {
+      if (!firstNameInput.value || !firstNameInput.value.match(/^([^0-9]*)$/)){
+        document.getElementById("firstNameErrorMsg").innerHTML = "le prénom n'est pas renseigné. ";
       }
+      else {
+        document.getElementById("firstNameErrorMsg").innerHTML = "";
+      }
+      
+    }, false);
 
+    let lastNameInput = document.getElementById("lastName");
+    lastNameInput.addEventListener("change", () => {
+      if (!lastNameInput.value || !lastNameInput.value.match(/^([^0-9]*)$/)){
+        document.getElementById("lastNameErrorMsg").innerHTML = "le nom n'est pas renseigné. ";
+      }
+      else {
+        document.getElementById("lastNameErrorMsg").innerHTML = "";
+      }
+      
     }, false);
   }
-  }
+  
 
   function showProducts() {
     if (localStorage.getItem("addToCart") !== null) {
