@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("firstNameErrorMsg").innerHTML = "";
     }
 
-    if (!lastName){
+    if (!lastName || !lastName.match (/^([^0-9]*)$/)){
       //msg += "le nom n'est pas renseigné";
       document.getElementById("lastNameErrorMsg").innerHTML = "le nom n'est pas renseigné";
       hasError = true;
