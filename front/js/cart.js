@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
     if(productsInCart.length == 0){
-      alert("Veuillez sélèctionner un produits avant de passer à la commande")
+      alert("Veuillez sélectionner un produits avant de passer à la commande.");
     }
     if (hasError || productsInCart.length == 0){
       e.preventDefault();
