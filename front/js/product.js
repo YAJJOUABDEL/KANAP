@@ -36,8 +36,8 @@ const getArticle = () => {
 
       data.colors.map((color) => {
         var newOption = document.createElement("option");
-        newOption.value = color;
-        newOption.text = color;
+        newOption.value = color ;
+        newOption.text = color ;
         colorElement.appendChild(newOption);
       });
     })
@@ -67,7 +67,8 @@ addToCart.addEventListener("click", () => {
       return;
     }
   }
-  else { addProductlocalStorage.push(addProduct); }
+  else {
+    addProductlocalStorage.push(addProduct); }
   localStorage.removeItem('addToCart');
   localStorage.setItem("addToCart", JSON.stringify(addProductlocalStorage));
 
@@ -81,7 +82,7 @@ function isQantityError(productExsitant) {
     isError = true;
   }
   if (Number(productExsitant.qantity) < 1) {
-    message += "Votre saisie est incorrect les chiffres négatifs ne sont pas autorisés. ";
+    message += "Votre saisie est incorrect les chiffres nuls ou négatifs ne sont pas autorisés. ";
     isError = true;
   }
   if (productExsitant.qantity.indexOf(".") > -1 || productExsitant.qantity.indexOf(",") > -1) {

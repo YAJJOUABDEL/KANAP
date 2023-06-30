@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var email = document.getElementById("email").value;
     let regEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+\.)+[\w-]{2,4}$/i;
   
-    if (!email || !email.match (regEmail)){
+    if (!email || email == "" || !email.match (regEmail)){
      // msg += "l'email n'est pas bien renseigné. " ;
      document.getElementById("emailErrorMsg").innerHTML = "l'email n'est pas bien renseigné. " ;
       hasError = true;
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("emailErrorMsg").innerHTML = "";
     }
 
-    if (!address){
+    if (!address || address == ""){
       //msg += "l'adresse n'est pas renseigné. ";
       document.getElementById("addressErrorMsg").innerHTML = "l'adresse n'est pas renseigné. ";
       hasError = true;
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("addressErrorMsg").innerHTML = "";
     }
 
-    if (!city){
+    if (!city || city == ""){
       //msg += "la ville n'est pas renseigné. ";
       document.getElementById("cityErrorMsg").innerHTML = "la ville n'est pas renseigné. ";
       hasError = true;
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("cityErrorMsg").innerHTML = "";
     }
 
-    if (!fstName || !fstName.match (/^([^0-9]*)$/)){
+    if (!fstName || fstName == "" || !fstName.match (/^([^0-9]*)$/)){
       //msg += "le prénom n'est pas renseigné. ";
       document.getElementById("firstNameErrorMsg").innerHTML = "le prénom n'est pas renseigné. ";
       hasError = true;
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("firstNameErrorMsg").innerHTML = "";
     }
 
-    if (!lastName || !lastName.match (/^([^0-9]*)$/)){
+    if (!lastName || lastName == "" || !lastName.match (/^([^0-9]*)$/)){
       //msg += "le nom n'est pas renseigné";
       document.getElementById("lastNameErrorMsg").innerHTML = "le nom n'est pas renseigné";
       hasError = true;
@@ -273,16 +273,19 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
     }
+    recalculateTotal(updateProcductslocalStorage);
+    localStorage.removeItem('addToCart');
+    localStorage.setItem("addToCart", JSON.stringify(updateProcductslocalStorage));
+
+
+  }
+  function recalculateTotal(updateProcductslocalStorage){
     let somme = 0;
     updateProcductslocalStorage.forEach(function (sofa) {
       let selectedProduct = allProducts.find(produit => produit._id == sofa.id);
       somme += Number(sofa.qantity) * Number(selectedProduct.price);
     });
     document.getElementById("totalPrice").innerHTML = somme;//Somme totale des canapés
-    localStorage.removeItem('addToCart');
-    localStorage.setItem("addToCart", JSON.stringify(updateProcductslocalStorage));
-
-
   }
   //Cette fonction est appelée lors du clic sur le bouton "Supprimer" pour un produit
   //Il récupère l'ID et la couleur du produit à partir de l' elementargument (qui est le bouton de suppression)
@@ -302,8 +305,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     localStorage.removeItem('addToCart');
     localStorage.setItem("addToCart", JSON.stringify(deleteProductlocalStorage));
-
-    showProducts(); //Actualise les produits affichés et le prix total
+    document.querySelector("[data-id = '" + id + "'][data-color = '"+ color + "']").remove();
+    recalculateTotal(deleteProductlocalStorage);
+    //showProducts(); //Actualise les produits affichés et le prix total
   }
 });
 
