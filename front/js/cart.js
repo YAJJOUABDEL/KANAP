@@ -1,6 +1,3 @@
-if (localStorage.getItem("addToCart") !== null) {
-  addProductlocalStorage = JSON.parse(localStorage.getItem("addToCart"));
-}
 // Code JavaScript pour afficher les canapés sélectionnés dans le panier
 document.addEventListener("DOMContentLoaded", function () {
   const cartItemsContainer = document.getElementById("cart__items");
@@ -21,11 +18,11 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(response => response.json())
       .then(data => {
         allProducts = data;
-        let somme = 0;
+        let total_a_payer = 0;
         // Parcoure les canapés sélectionnés et générez dynamiquement des éléments de panier
         selectedProducts.forEach(function (sofa) {
           let selectedProduct = data.find(produit => produit._id == sofa.id);
-          somme += Number(sofa.qantity) * Number(selectedProduct.price);//calcule + ajout à la somme
+          total_a_payer += Number(sofa.qantity) * Number(selectedProduct.price);//calcule + ajout à la somme
           const cartItem = document.createElement("article");
           cartItem.classList.add("cart__item");
           cartItem.setAttribute("data-id", sofa.id);
@@ -86,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           cartItemsContainer.appendChild(cartItem);
         });
-        document.getElementById("totalPrice").innerHTML = somme;//Somme totale des canapés
+        document.getElementById("totalPrice").innerHTML = total_a_payer;//Somme totale des canapés
         const deletesButton = document.getElementsByClassName("deleteItem");
 
         for (var i = 0; i < deletesButton.length; i++) {
@@ -117,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let firstNameInput = document.getElementById("firstName");
     firstNameInput.addEventListener("change", () => {
       if (!firstNameInput.value || !firstNameInput.value.match(/^([^0-9]*)$/)){//Mise en place de Regex
-        document.getElementById("firstNameErrorMsg").innerHTML = "le prénom n'est pas renseigné. ";
+        document.getElementById("firstNameErrorMsg").innerHTML = "le prénom n'est pas renseigné correctement. ";
       }
       else {
         document.getElementById("firstNameErrorMsg").innerHTML = "";
@@ -128,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let lastNameInput = document.getElementById("lastName");
     lastNameInput.addEventListener("change", () => {
       if (!lastNameInput.value || !lastNameInput.value.match(/^([^0-9]*)$/)){//Mise en place de Regex
-        document.getElementById("lastNameErrorMsg").innerHTML = "le nom n'est pas renseigné. ";
+        document.getElementById("lastNameErrorMsg").innerHTML = "le nom n'est pas renseigné correctement. ";
       }
       else {
         document.getElementById("lastNameErrorMsg").innerHTML = "";
@@ -138,8 +135,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   //Cette fonction est appelée lorsque la quantité d'un produit est mise à jour
-  //Il récupère l'ID et la couleur du produit à partir de l' elementargument (qui est un champ de saisie).
-  function updateProcduct(element) {
+  //Il récupère l'ID et la couleur du produit à partir des attributs de l'élément (qui est un champ de saisie).
+  function updateProcduct(element) { //element est une zone de texte.
 
     let id = element.getAttribute("identifiant");
     let color = element.getAttribute("color");
@@ -236,25 +233,17 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       if (hasError || productsInCart.length == 0){
         e.preventDefault();
-         return;
+         return; //on quitte le traitement
       }
       
-  
-      let customer = {
-        firstName : fstName, 
-        lastName : lastName,
-        address : address,
-        city : city,
-        email : email
-      };
       
-      let cmd = {
+      let commandProducts = { //objet à envoyer vers l'API
         contact: {
-          firstName: customer.firstName,
-          lastName: customer.lastName,
-          address: customer.address,
-          city: customer.city,
-          email: customer.email,
+          firstName: firstName,
+          lastName: lastName,
+          address: address,
+          city: city,
+          email: email,
         },
         products : productsInCart,
       };
@@ -267,7 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
          //  'Access-Control-Allow-Origin':'*'
           // 'Content-Type': 'application/x-www-form-urlencoded',
          },
-        body: JSON.stringify(cmd),
+        body: JSON.stringify(commandProducts),
       })
         .then(response => response.json())
         .then(data => {
@@ -285,12 +274,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function recalculateTotal(updateProcductslocalStorage){
-    let somme = 0;
+    let total_a_payer = 0;
     updateProcductslocalStorage.forEach(function (sofa) {
       let selectedProduct = allProducts.find(produit => produit._id == sofa.id);
-      somme += Number(sofa.qantity) * Number(selectedProduct.price);
+      total_a_payer += Number(sofa.qantity) * Number(selectedProduct.price);
     });
-    document.getElementById("totalPrice").innerHTML = somme;//Somme totale des canapés
+    document.getElementById("totalPrice").innerHTML = total_a_payer;//Somme totale des canapés
   }
   //Cette fonction est appelée lors du clic sur le bouton "Supprimer" pour un produit
   //Il récupère l'ID et la couleur du produit à partir de l' elementargument (qui est le bouton de suppression)
@@ -305,7 +294,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let productExsitant = deleteProductlocalStorage.find(produit => produit.id == id && produit.color == color);
     if (productExsitant) {
-      deleteProductlocalStorage.splice(deleteProductlocalStorage.indexOf(productExsitant), 1);
+      deleteProductlocalStorage.splice(deleteProductlocalStorage.indexOf(productExsitant), 1);//il supprime un seul élément du tableau
     }
 
     localStorage.removeItem('addToCart');

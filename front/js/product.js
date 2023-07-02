@@ -50,7 +50,7 @@ addToCart.addEventListener("click", () => {
     color: document.getElementById("colors").value,
     id: id
   }
-  if (isQantityError(addProduct)) {
+  if (areInputsError(addProduct)) {
     //Je remonte un message lors de la sélèction de quantité de produit
     return;
   }
@@ -62,7 +62,7 @@ addToCart.addEventListener("click", () => {
   let productExsitant = addProductlocalStorage.find(produit => produit.id == addProduct.id && produit.color == addProduct.color);
   if (productExsitant) {
     productExsitant.qantity = (Number(productExsitant.qantity) + Number(addProduct.qantity)).toString();
-    if (isQantityError(productExsitant)) {
+    if (areInputsError(productExsitant)) {
       //Je remonte un message lors de la sélèction de quantité de produit
       return;
     }
@@ -74,9 +74,14 @@ addToCart.addEventListener("click", () => {
 
 })
 
-function isQantityError(productExsitant) {
+function areInputsError(productExsitant) {
   let message = "";
   let isError = false;
+  if (!productExsitant.color || productExsitant.color == ""){
+    message += "Vous n'avez pas choisi la couleur. ";
+    isError = true;
+  }
+
   if (Number(productExsitant.qantity) > 100) {
     message += "Vous avez dépassé la limite de commande. ";
     isError = true;
